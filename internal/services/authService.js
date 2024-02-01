@@ -10,11 +10,12 @@ const secretKey = process.env.JWT_SECRET; // JWT 토큰 생성 시 사용할 시
 
 // 회원가입 기능
 exports.register = (username, password, callback) => {
-    // 비밀번호를 bcrypt를 이용해 해싱
-    user.findByUsername(username, (err, user) => {
+    // 사용자를 찾아 중복 검사
+    user.findByUsername(username, (err, existingUser) => {
         if (err) return callback(err); // 데이터베이스 조회 중 에러 발생 시 콜백으로 에러 전달
-        if (user) return callback(new Error("User already exists")); // 사용자가 이미 존재할 경우 에러 처리
+        if (existingUser) return callback(new Error("User already exists")); // 사용자가 이미 존재할 경우 에러 처리
 
+        // 중복 사용자가 없는 경우 비밀번호 해싱
         bcrypt.hash(password, 10, (err, hash) => {
             if (err) return callback(err); // 해싱 과정에서 에러 발생 시 콜백으로 에러 전달
             // 해싱된 비밀번호를 사용하여 사용자 생성
