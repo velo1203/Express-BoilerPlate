@@ -1,0 +1,37 @@
+// 필요한 모듈을 불러옵니다.
+const express = require("express"); // Express 프레임워크
+const authService = require("../services/authService"); // 인증 서비스 로직이 정의된 모듈
+
+const router = express.Router(); // 새 Express 라우터 인스턴스를 생성합니다.
+
+// 회원가입을 위한 POST 엔드포인트
+router.post("/register", (req, res) => {
+    // 클라이언트 요청의 본문에서 사용자 이름과 비밀번호를 추출하여 authService의 register 함수에 전달합니다.
+    authService.register(
+        req.body.username,
+        req.body.password,
+        // 콜백 함수: 회원가입 과정에서 발생하는 결과를 처리합니다.
+        (err, userId) => {
+            if (err) return res.status(500).json({ error: err.message }); // 에러 발생 시 클라이언트에 500 상태 코드와 에러 메시지를 반환합니다.
+            // 성공적으로 사용자가 등록되면, 성공 메시지와 함께 사용자 ID를 반환합니다.
+            res.json({ message: "User registered successfully", userId });
+        }
+    );
+});
+
+// 로그인을 위한 POST 엔드포인트
+router.post("/login", (req, res) => {
+    // 클라이언트 요청의 본문에서 사용자 이름과 비밀번호를 추출하여 authService의 login 함수에 전달합니다.
+    authService.login(
+        req.body.username,
+        req.body.password,
+        // 콜백 함수: 로그인 과정에서 발생하는 결과를 처리합니다.
+        (err, token) => {
+            if (err) return res.status(401).json({ error: err.message }); // 에러 발생 시 클라이언트에 401 상태 코드와 에러 메시지를 반환합니다.
+            // 로그인이 성공적으로 이루어지면, 성공 메시지와 함께 JWT 토큰을 반환합니다.
+            res.json({ message: "Logged in successfully", token });
+        }
+    );
+});
+
+module.exports = router; // 정의된 라우터 모듈을 내보냅니다.
