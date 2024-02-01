@@ -1,5 +1,4 @@
 // database/db.js
-
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("./database.db"); // 데이터베이스 파일 생성 및 연결
 

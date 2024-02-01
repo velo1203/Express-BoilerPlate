@@ -1,19 +1,25 @@
 // 필요한 모듈 불러오기
 const bcrypt = require("bcrypt"); // 비밀번호를 해싱하기 위한 bcrypt 모듈
 const jwt = require("jsonwebtoken"); // JWT 토큰을 생성하고 검증하기 위한 jsonwebtoken 모듈
+require("dotenv").config(); // .env 파일에서 환경변수 불러오기
 const User = require("../models/user"); // 사용자 모델
 const db = require("../database/db"); // 데이터베이스 연결 설정
 const user = new User(db); // User 클래스의 인스턴스 생성
 
-const secretKey = "your_secret_key"; // JWT 토큰 생성을 위한 시크릿 키
+const secretKey = process.env.JWT_SECRET; // JWT 토큰 생성 시 사용할 시크릿 키
 
 // 회원가입 기능
 exports.register = (username, password, callback) => {
     // 비밀번호를 bcrypt를 이용해 해싱
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) return callback(err); // 해싱 과정에서 에러 발생 시 콜백으로 에러 전달
-        // 해싱된 비밀번호를 사용하여 사용자 생성
-        user.createUser(username, hash, callback);
+    user.findByUsername(username, (err, user) => {
+        if (err) return callback(err); // 데이터베이스 조회 중 에러 발생 시 콜백으로 에러 전달
+        if (user) return callback(new Error("User already exists")); // 사용자가 이미 존재할 경우 에러 처리
+
+        bcrypt.hash(password, 10, (err, hash) => {
+            if (err) return callback(err); // 해싱 과정에서 에러 발생 시 콜백으로 에러 전달
+            // 해싱된 비밀번호를 사용하여 사용자 생성
+            user.createUser(username, hash, callback);
+        });
     });
 };
 
