@@ -14,11 +14,21 @@ class User {
         );
     }
 
+    findByEmail(email, callback) {
+        return this.db.get(
+            "SELECT * FROM users WHERE email = ?",
+            [email],
+            function (err, row) {
+                callback(err, row);
+            }
+        );
+    }
+
     // 사용자 추가
-    createUser(username, password, callback) {
+    createUser(email, username, password, callback) {
         return this.db.run(
-            "INSERT INTO users (username, password) VALUES (?, ?)",
-            [username, password],
+            "INSERT INTO users (username, password,email) VALUES (?, ?, ?)",
+            [username, password, email],
             function (err) {
                 callback(err, this.lastID);
             }

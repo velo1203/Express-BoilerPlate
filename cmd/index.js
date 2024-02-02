@@ -7,7 +7,7 @@ const port = 3000;
 
 app.use(express.json()); // JSON 요청 본문 파싱을 위한 미들웨어
 app.use(logRequest); // 로그 미들웨어 등록
-app.use("/api/auth", authRouter); // 인증 라우터 등록
+app.use(authRouter); // 인증 라우터 등록
 
 // 인증된 사용자만 접근 가능한 임시 라우트
 app.get("/api/protected", authenticate, (req, res) => {

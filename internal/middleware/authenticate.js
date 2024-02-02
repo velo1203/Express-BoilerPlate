@@ -1,4 +1,4 @@
-require("dotenv").config(); // .env 파일에서 환경변수 불러오기
+require("dotenv").config({ path: "cmd/.env" }); // .env 파일에서 환경변수 불러오기
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET; // JWT 토큰 생성 시 사용할 시크릿 키
 
