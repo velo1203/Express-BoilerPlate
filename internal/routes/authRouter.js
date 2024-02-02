@@ -1,6 +1,6 @@
 // 필요한 모듈을 불러옵니다.
 const express = require("express"); // Express 프레임워크
-const authService = require("../services/authService"); // 인증 서비스 로직이 정의된 모듈
+const authService = require("../controllers/authService"); // 인증 서비스 로직이 정의된 모듈
 
 const router = express.Router(); // 새 Express 라우터 인스턴스를 생성합니다.
 
