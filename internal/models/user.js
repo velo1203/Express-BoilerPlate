@@ -4,35 +4,44 @@ class User {
     }
 
     // 사용자 찾기
-    findByUsername(username, callback) {
-        return this.db.get(
-            "SELECT * FROM users WHERE username = ?",
-            [username],
-            function (err, row) {
-                callback(err, row);
-            }
-        );
+    findByUsername(username) {
+        return new Promise((resolve, reject) => {
+            this.db.get(
+                "SELECT * FROM users WHERE username = ?",
+                [username],
+                function (err, row) {
+                    if (err) reject(err);
+                    else resolve(row);
+                }
+            );
+        });
     }
 
-    findByEmail(email, callback) {
-        return this.db.get(
-            "SELECT * FROM users WHERE email = ?",
-            [email],
-            function (err, row) {
-                callback(err, row);
-            }
-        );
+    findByEmail(email) {
+        return new Promise((resolve, reject) => {
+            this.db.get(
+                "SELECT * FROM users WHERE email = ?",
+                [email],
+                function (err, row) {
+                    if (err) reject(err);
+                    else resolve(row);
+                }
+            );
+        });
     }
 
     // 사용자 추가
-    createUser(email, username, password, callback) {
-        return this.db.run(
-            "INSERT INTO users (username, password,email) VALUES (?, ?, ?)",
-            [username, password, email],
-            function (err) {
-                callback(err, this.lastID);
-            }
-        );
+    createUser(email, username, password) {
+        return new Promise((resolve, reject) => {
+            this.db.run(
+                "INSERT INTO users (username, password,email) VALUES (?, ?, ?)",
+                [username, password, email],
+                function (err) {
+                    if (err) reject(err);
+                    else resolve(this.lastID);
+                }
+            );
+        });
     }
 }
 
