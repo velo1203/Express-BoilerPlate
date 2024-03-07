@@ -10,6 +10,10 @@ yarn-error.log*
 /dist
 /build
 
+
+# 데이터베이스
+.db
+
 # OS 생성 파일
 .DS_Store
 .DS_Store?
